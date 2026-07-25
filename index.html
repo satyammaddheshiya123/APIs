@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("weather-theme");
+        var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <title>Weather Dashboard — live city weather</title>
+  <meta name="description" content="A real-time weather dashboard built with the Fetch API and async/await, showing live temperature, humidity, and wind speed for any city." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a1628'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%E2%9B%85%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <main id="main" class="app-shell">
+    <header class="app-header">
+      <div class="app-title">
+        <p class="eyebrow"><span aria-hidden="true">$</span> fetch current-weather</p>
+        <h1>Weather<span class="dim">Dashboard</span></h1>
+      </div>
+      <div class="header-controls">
+        <button type="button" class="unit-toggle" id="unitToggle" aria-pressed="false">°C / °F</button>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false">
+          <span class="theme-toggle-icon" aria-hidden="true">&#127769;</span>
+          <span class="theme-toggle-label">Dark mode</span>
+        </button>
+      </div>
+    </header>
+
+    <form id="searchForm" class="search-row" autocomplete="off" role="search">
+      <label for="citySearch" class="sr-only">Search for a city</label>
+      <input
+        type="text"
+        id="citySearch"
+        name="city"
+        placeholder="Search a city — e.g. Lucknow, Tokyo, Berlin…"
+        aria-describedby="searchHint"
+        aria-expanded="false"
+        aria-controls="suggestions"
+        role="combobox"
+        aria-autocomplete="list"
+      />
+      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="button" class="btn btn-outline" id="useLocationBtn">
+        <span aria-hidden="true">&#128205;</span> My location
+      </button>
+      <p id="searchHint" class="sr-only">Type a city name and press Enter, or choose from suggestions below.</p>
+    </form>
+
+    <ul id="suggestions" class="suggestions" role="listbox" aria-label="City suggestions" hidden></ul>
+
+    <div class="recent-row" id="recentRow" aria-label="Recent searches" hidden>
+      <span class="recent-label">Recent:</span>
+      <div class="recent-chips" id="recentChips"></div>
+    </div>
+
+    <p class="status-line" id="statusLine" role="status" aria-live="polite"></p>
+
+    <section class="weather-card" id="weatherCard" aria-labelledby="locationName" hidden>
+      <div class="weather-card-top">
+        <div>
+          <h2 id="locationName">—</h2>
+          <p class="local-time" id="localTime"></p>
+        </div>
+        <button type="button" class="icon-btn refresh-btn" id="refreshBtn" aria-label="Refresh weather for this location">
+          <span aria-hidden="true">&#8635;</span>
+        </button>
+      </div>
+
+      <div class="weather-hero">
+        <span class="weather-icon" id="weatherIcon" aria-hidden="true">☀️</span>
+        <div class="weather-temp-block">
+          <span class="weather-temp" id="weatherTemp">--°</span>
+          <span class="weather-desc" id="weatherDesc">—</span>
+          <span class="weather-feels" id="weatherFeels"></span>
+        </div>
+      </div>
+
+      <div class="metrics-grid" id="metricsGrid"></div>
+
+      <p class="updated-line" id="updatedLine"></p>
+      <p class="attribution">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a></p>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
